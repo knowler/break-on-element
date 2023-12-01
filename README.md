@@ -7,7 +7,7 @@ the element in the `<break-on>` custom element. [See the demo](https://knowler.g
 ## Defining
 
 ```javascript
-import { BreakOnElement } from "https://esm.sh/gh/knowler/break-on-element.js?raw";
+import { BreakOnElement } from "https://esm.sh/gh/knowler/break-on-element/break-on-element.js?raw";
 
 BreakOnElement.define();
 ```
