@@ -2,7 +2,7 @@
 
 A custom element that is a declarative `MutationObserver` for debugging.
 Instead of opening your developer tools to set these breakpoints wrap
-the element in the `<break-on>` custom element. [See the demo](https://knowler.github.io/break-on-element/demo.html).
+the element in the `<break-on>` custom element. [See the demo](https://knowler.github.io/break-on-element/demo).
 
 ## Defining
 
