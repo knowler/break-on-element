@@ -38,12 +38,6 @@ BreakOnElement.define();
 <break-on children subtree>
 	<p>Will break on adding and removing all descendants.</p>
 </break-on>
-
-<break-on selector=":scope > div > p" attributes="class">
-	<div>
-		<p>Will break on adding class names to this nested element.</p>
-	</div>
-</break-on>
 ```
 
 ## Future
