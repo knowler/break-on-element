@@ -51,7 +51,7 @@ export class BreakOnElement extends HTMLElement {
 				});
 				this.#observer.observe(this.elementToObserve, options);
 			} else {
-				console.warn("Not observing: insufficient options supplied");
+				console.log("Not observing: insufficient options supplied", this);
 			}
 		}
 	}
