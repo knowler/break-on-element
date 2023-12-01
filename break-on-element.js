@@ -5,7 +5,7 @@ export class BreakOnElement extends HTMLElement {
 	#observer;
 
 	get elementToObserve() {
-		return this.querySelector(":scope > :only-child");
+		return this.querySelector(this.hasAttribute("selector") ? this.getAttribute('selector') : "scope > :only-child");
 	}
 
 	connectedCallback() {

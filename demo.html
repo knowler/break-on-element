@@ -121,5 +121,10 @@
 				</span>
 			</p>
 		</break-on>
+		<break-on selector=":scope > div > p" attributes="class">
+			<div>
+				<p>Setting the breakpoint on a nested element <modify-parent attribute="class" value="hello">Add Class</modify-parent></p>
+			</div>
+		</break-on>
 	</body>
 </html>
