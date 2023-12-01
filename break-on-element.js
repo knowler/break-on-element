@@ -57,7 +57,7 @@ export class BreakOnElement extends HTMLElement {
 	}
 
 	disconnectedCallback() {
-		this.#observer.disconnect();
+		this.#observer?.disconnect();
 	}
 
 	static define(tagName = "break-on") {
