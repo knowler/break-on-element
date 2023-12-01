@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en-ca">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			html {
+				font-family: system-ui;
+			}
+		</style>
+		<script type="module">
+			import { BreakOnElement } from "./break-on-element.js";
+
+			BreakOnElement.define();
+
+			customElements.define("modify-parent", class extends HTMLElement {
+				connectedCallback() {
+					this.attachShadow({ mode: "open" })
+
+					this.shadowRoot.innerHTML = `
+						<button type="button"><slot></slot></button>
+					`;
+
+					this.shadowRoot
+						.querySelector(":host > button")
+						.addEventListener("click", () => {
+							this.parentElement.setAttribute(
+								this.getAttribute("attribute"),
+								this.getAttribute("value"),
+							);
+						});
+				}
+			});
+			customElements.define("add-sibling", class extends HTMLElement {
+				connectedCallback() {
+					this.attachShadow({ mode: "open" });
+					this.shadowRoot.innerHTML = `
+						<button type="button"><slot>Add Sibling</slot></button>
+					`;
+					this.shadowRoot
+						.querySelector(":host > button")
+						.addEventListener("click", () => {
+							const siblingElement = this.ownerDocument.createElement("span");
+							siblingElement.textContent = "Sibling";
+							siblingElement.classList.add("sibling");
+							this.parentElement.appendChild(siblingElement);
+						});
+				}
+			});
+			customElements.define("remove-sibling", class extends HTMLElement {
+				connectedCallback() {
+					this.attachShadow({ mode: "open" });
+					this.shadowRoot.innerHTML = `
+						<button type="button"><slot>Remove Sibling</slot></button>
+					`;
+					this.shadowRoot
+						.querySelector(":host > button")
+						.addEventListener("click", () => {
+							const lastSibling = this.parentElement.querySelector(":scope > .sibling:last-of-type");
+							lastSibling?.remove();
+						});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Break On Element Demonstration</h1>
+		<p>This custom element is a declarative debugger for element modifications.</p>
+		<hr>
+		<break-on>
+			<p>This doesn’t provide sufficient options for it to be observed.</p>
+		</break-on>
+		<break-on attributes>
+			<p>
+				Breaking on attribute modifications:
+				<modify-parent attribute="id" value="something">Add ID</modify-parent>
+				<modify-parent attribute="class" value="something">Add Class</modify-parent>
+			</p>
+		</break-on>
+		<break-on attributes="class">
+			<p>
+				Breaking on class attribute modifications:
+				<modify-parent attribute="id" value="something">Add ID</modify-parent>
+				<modify-parent attribute="class" value="something">Add Class</modify-parent>
+			</p>
+		</break-on>
+		<break-on attributes="class id">
+			<p>
+				Breaking on class and ID attribute modifications:
+				<modify-parent attribute="id" value="something">Add ID</modify-parent>
+				<modify-parent attribute="class" value="something">Add Class</modify-parent>
+				<modify-parent attribute="style" value="--custom-prop: hello;">Add Custom Property</modify-parent>
+			</p>
+		</break-on>
+		<break-on attributes subtree>
+			<p>
+				Breaking on attribute modifications including in the subtree.
+				<modify-parent attribute="id" value="something">Add ID</modify-parent>
+				<modify-parent attribute="class" value="something">Add Class</modify-parent>
+				<span>
+					<modify-parent attribute="style" value="--custom-prop: hello;">Add Custom Property to Subtree element</modify-parent>
+				</span>
+			</p>
+		</break-on>
+		<break-on children>
+			<p>
+				Break on children added or removed.
+				<add-sibling></add-sibling>
+				<remove-sibling></remove-sibling>
+			</p>
+		</break-on>
+		<break-on children subtree>
+			<p>
+				Break on children added or removed in a subtree.
+				<add-sibling></add-sibling>
+				<remove-sibling></remove-sibling>
+				<span>
+					<add-sibling></add-sibling>
+					<remove-sibling></remove-sibling>
+				</span>
+			</p>
+		</break-on>
+	</body>
+</html>
