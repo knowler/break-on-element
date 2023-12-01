@@ -1,8 +1,11 @@
-const breakOnElementStyleSheet = new CSSStyleSheet();
-await breakOnElementStyleSheet.replace(`:host { display: contents }`);
 
 export class BreakOnElement extends HTMLElement {
 	#observer;
+
+	static {
+		this.styleSheet = new CSSStyleSheet();
+		this.styleSheet.replaceSync(`:host { display: contents }`);
+	}
 
 	get elementToObserve() {
 		return this.querySelector(this.hasAttribute("selector") ? this.getAttribute("selector") : ":scope > :only-child");
@@ -11,7 +14,7 @@ export class BreakOnElement extends HTMLElement {
 	connectedCallback() {
 		if (!this.shadowRoot) {
 			this.attachShadow({ mode: "open" });
-			this.shadowRoot.adoptedStyleSheets = [breakOnElementStyleSheet];
+			this.shadowRoot.adoptedStyleSheets = [this.constructor.styleSheet];
 			this.shadowRoot.innerHTML = "<slot></slot>";
 		}
 
