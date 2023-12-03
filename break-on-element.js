@@ -1,4 +1,3 @@
-
 export class BreakOnElement extends HTMLElement {
 	#observer;
 
@@ -39,11 +38,11 @@ export class BreakOnElement extends HTMLElement {
 				options.childList = true;
 			}
 
-			// TODO: does characterData allow us to support text changes?
-			//if (this.hasAttribute("text")) {
-			//	options.characterData = true;
-			//	options.characterDataOldValue = true;
-			//}
+			if (this.hasAttribute("text")) {
+				options.subtree = true;
+				options.characterData = true;
+				options.characterDataOldValue = true;
+			}
 
 			if (options.attributes || options.childList || options.characterData) {
 				this.#observer = new MutationObserver(mutationRecords => {

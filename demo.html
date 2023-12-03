@@ -126,5 +126,28 @@
 				<p>Setting the breakpoint on a nested element <modify-parent attribute="class" value="hello">Add Class</modify-parent></p>
 			</div>
 		</break-on>
+		<break-on text>
+			<p>
+				Hello
+				<button type="button">Add Text</button>
+				<button type="button">Remove Text</button>
+				<script>
+					const paragraphElement = document.currentScript.parentElement;
+					const helloTextNode = paragraphElement.childNodes.item(0);
+					const [addTextButton, removeTextButton] = paragraphElement.querySelectorAll(":scope > button");
+
+					addTextButton.addEventListener("click", event => {
+						helloTextNode.appendData(" World!");
+					});
+
+					removeTextButton.addEventListener("click", event => {
+						helloTextNode.deleteData(
+							helloTextNode.length - 7,
+							7,
+						);
+					});
+				</script>
+			</p>
+		</break-on>
 	</body>
 </html>

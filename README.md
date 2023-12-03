@@ -45,10 +45,12 @@ BreakOnElement.define();
 		<p>Setting the breakpoint on a nested element</p>
 	</div>
 </break-on>
+
+<break-on text>
+	<p>Text changes within an element. This applies to any text change in the subtree.</p>
+</break-on>
 ```
 
 ## Future
 
 - Options for only additions or deletions of attributes and children.
-- Options for monitoring text changes. I believe `MutationObserver`’s
-	`characterData` option might allow us to do this.
