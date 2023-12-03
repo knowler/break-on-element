@@ -7,7 +7,20 @@ export class BreakOnElement extends HTMLElement {
 	}
 
 	get elementToObserve() {
-		return this.querySelector(this.hasAttribute("selector") ? this.getAttribute("selector") : ":scope > :only-child");
+		const elementToObserve = this.querySelector(this.hasAttribute("selector") ? this.getAttribute("selector") : ":scope > :only-child");
+
+		if (this.hasAttribute("text") && !this.hasAttribute("subtree")) {
+			let textNode = null;
+			for (const node of elementToObserve.childNodes) {
+				if (node instanceof Text) {
+					textNode = node;
+					break;
+				}
+			}
+			return textNode;
+		}
+
+		return elementToObserve;
 	}
 
 	connectedCallback() {
@@ -17,7 +30,9 @@ export class BreakOnElement extends HTMLElement {
 			this.shadowRoot.innerHTML = "<slot></slot>";
 		}
 
-		if (this.elementToObserve) {
+		const elementToObserve = this.elementToObserve;
+
+		if (elementToObserve) {
 			const options = {};
 
 			if (this.hasAttribute("subtree")) {
@@ -39,7 +54,6 @@ export class BreakOnElement extends HTMLElement {
 			}
 
 			if (this.hasAttribute("text")) {
-				options.subtree = true;
 				options.characterData = true;
 				options.characterDataOldValue = true;
 			}
@@ -48,7 +62,7 @@ export class BreakOnElement extends HTMLElement {
 				this.#observer = new MutationObserver(mutationRecords => {
 					debugger;
 				});
-				this.#observer.observe(this.elementToObserve, options);
+				this.#observer.observe(elementToObserve, options);
 			} else {
 				console.log("Not observing: insufficient options supplied", this);
 			}

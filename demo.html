@@ -61,6 +61,46 @@
 						});
 				}
 			});
+			customElements.define("add-text", class extends HTMLElement {
+				connectedCallback() {
+					this.attachShadow({ mode: "open" });
+					this.shadowRoot.innerHTML = `
+						<button type="button"><slot>Add Text</slot></button>
+					`;
+					this.shadowRoot
+						.querySelector(":host > button")
+						.addEventListener("click", () => {
+							let firstTextNode;
+							for (const node of this.parentElement.childNodes) {
+								if (node instanceof Text) {
+									firstTextNode = node;
+									break;
+								}
+							}
+							firstTextNode.appendData(" Hello, World!");
+						});
+				}
+			});
+			customElements.define("remove-text", class extends HTMLElement {
+				connectedCallback() {
+					this.attachShadow({ mode: "open" });
+					this.shadowRoot.innerHTML = `
+						<button type="button"><slot>Remove Text</slot></button>
+					`;
+					this.shadowRoot
+						.querySelector(":host > button")
+						.addEventListener("click", () => {
+							let firstTextNode;
+							for (const node of this.parentElement.childNodes) {
+								if (node instanceof Text) {
+									firstTextNode = node;
+									break;
+								}
+							}
+							firstTextNode.deleteData(firstTextNode.length - 14, 14);
+						});
+				}
+			});
 		</script>
 	</head>
 	<body>
@@ -127,27 +167,32 @@
 			</div>
 		</break-on>
 		<break-on text>
-			<p>
-				Hello
-				<button type="button">Add Text</button>
-				<button type="button">Remove Text</button>
-				<script>
-					const paragraphElement = document.currentScript.parentElement;
-					const helloTextNode = paragraphElement.childNodes.item(0);
-					const [addTextButton, removeTextButton] = paragraphElement.querySelectorAll(":scope > button");
-
-					addTextButton.addEventListener("click", event => {
-						helloTextNode.appendData(" World!");
-					});
-
-					removeTextButton.addEventListener("click", event => {
-						helloTextNode.deleteData(
-							helloTextNode.length - 7,
-							7,
-						);
-					});
-				</script>
-			</p>
+			<div>
+				Breaks on text changes to the first top-level text node.
+				<add-text></add-text>
+				<remove-text></remove-text>
+				<ul>
+					<li>
+						Sub tree text node.
+						<add-text></add-text>
+						<remove-text></remove-text>
+					</li>
+				</ul>
+			</div>
+		</break-on>
+		<break-on text subtree>
+			<div>
+				Breaks on text changes to all text nodes in the subtree.
+				<add-text></add-text>
+				<remove-text></remove-text>
+				<ul>
+					<li>
+						Sub tree text node.
+						<add-text></add-text>
+						<remove-text></remove-text>
+					</li>
+				</ul>
+			</div>
 		</break-on>
 	</body>
 </html>

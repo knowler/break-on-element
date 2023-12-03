@@ -39,15 +39,18 @@ BreakOnElement.define();
 	<p>Will break on adding and removing all descendants.</p>
 </break-on>
 
+<break-on text>
+	<p>Will break on text changes in the first top-level text node.</p>
+</break-on>
+
+<break-on text subtree>
+	<p>Will break on all text changes within an element.</p>
+</break-on>
 
 <break-on selector=":scope > div > p" attributes="class">
 	<div>
 		<p>Setting the breakpoint on a nested element</p>
 	</div>
-</break-on>
-
-<break-on text>
-	<p>Text changes within an element. This applies to any text change in the subtree.</p>
 </break-on>
 ```
 
